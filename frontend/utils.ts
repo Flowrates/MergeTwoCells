@@ -85,7 +85,7 @@ export async function doCheckAndMerge(
             if (
                 srcType !== MULTIPLE_RECORD_LINKS
                 && !(srcType === MULTIPLE_LOOKUP_VALUES
-                    && (src.record.getCellValue(src.field) as { value: { id: string} }[])?.[0]?.value?.id)
+                    && (src.record.getCellValue(src.field) as { value: { id: string} }[])[0]?.value?.id)
             ) {
                 console.log('Can only merge Linked Records or Record Lookups into Linked Records')
                 setUndoHistory(undoHistory.slice(-1))
