@@ -125,27 +125,27 @@ async function doMerge(table: Table, src: Cell, dst: Cell) {
     const merged = [...dstValue]
 
     for (const srcItem of srcValue) {
-        let value: { id: string}
+        let item: { id: string}
 
         if (
             srcType === MULTIPLE_SELECTS
             || srcType === MULTIPLE_RECORD_LINKS
             || srcType === MULTIPLE_ATTACHMENTS
         ) {
-            value = srcItem as { id: string}
+            item = srcItem as { id: string}
         } else if (
             srcType === MULTIPLE_LOOKUP_VALUES
             && (srcItem as { value: { id: string} } )?.value?.id
         ) {
-            value = (srcItem as { value: { id: string} } ).value
+            item = (srcItem as { value: { id: string} } ).value
         } else {
             console.warn('Wrong Source type')
 
             return
         }
 
-        if (!containsId(dstValue, value)) {
-            merged.push(value)
+        if (!containsId(dstValue, item)) {
+            merged.push(item)
         }
     }
 
