@@ -50,7 +50,7 @@ export async function doUndo(
 }
 
 
-export async function doMergeCells(
+export async function doCheckAndMerge(
     table: Table,
     src: Cell,
     dst: Cell,

@@ -17,7 +17,7 @@ import { Cell } from './types'
 import {
     canMerge,
     cellsEqual,
-    doMergeCells,
+    doCheckAndMerge,
     doUndo,
 } from './utils'
 
@@ -68,7 +68,7 @@ export function App() : JSX.Element {
                 width={190}
             >
                 <Button
-                    onClick={() => { doMergeCells(table, src, dst, undoHistory, setUndoHistory)}}
+                    onClick={() => { doCheckAndMerge(table, src, dst, undoHistory, setUndoHistory) }}
                     variant='primary'
                     size='large'
                     icon='cursor'
