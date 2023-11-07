@@ -120,8 +120,8 @@ export async function doMergeCells(
 
 async function doMerge(table: Table, src: Cell, dst: Cell) {
     const srcType = src.field.type
-    const srcValue = src.record.getCellValue(src.field) as unknown[]
-    const dstValue = dst.record.getCellValue(dst.field) as { id: string} []
+    const srcValue = (src.record.getCellValue(src.field) || []) as unknown[]
+    const dstValue = (dst.record.getCellValue(dst.field) || []) as { id: string} []
     const merged = [...dstValue]
 
     for (const srcItem of srcValue) {

@@ -36,8 +36,7 @@ export function CellDisplay({ label, active, cell }: CellDisplayOpts): JSX.Eleme
             >
                 {loaded
                     ? <CellRenderer field={field} record={record} />
-                    : ''
-                }
+                    : ''}
             </Box>
         </FormField>
     )
