@@ -161,3 +161,37 @@ async function doMerge(table: Table, src: Cell, dst: Cell) {
 async function doSetCell(table: Table, cell: Cell, value: unknown) {
     await table.updateRecordAsync(cell.record, { [cell.field.id]: value })
 }
+
+
+export async function doSortCell(
+    table: Table,
+    cell: Cell,
+    sortAscending: boolean,
+    undoHistory: UndoHistory[],
+    setUndoHistory: React.Dispatch<React.SetStateAction<UndoHistory[]>>,
+): Promise<void> {
+    const type = cell.field.type
+
+    if (!(
+        type === MULTIPLE_SELECTS
+        || type === MULTIPLE_RECORD_LINKS
+        || type === MULTIPLE_ATTACHMENTS
+    )) {
+        console.warn('Not sortable')
+
+        return
+    }
+
+    const values = (cell.record.getCellValue(cell.field) || []) as { id: string, name: string} []
+
+    setUndoHistory([{ cell: cell, value: cell.record.getCellValue(cell.field) }, ...undoHistory])
+
+    values.sort(
+        (a, b) => (
+            (sortAscending ? 1 : -1)
+            * a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
+        ),
+    )
+
+    await doSetCell(table, cell, values)
+}

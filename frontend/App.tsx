@@ -18,6 +18,7 @@ import {
     canMerge,
     cellsEqual,
     doCheckAndMerge,
+    doSortCell,
     doUndo,
 } from './utils'
 
@@ -31,6 +32,7 @@ export function App() : JSX.Element {
     const base = useBase()
     const [prevCell, setPrevCell] = useState(null as Cell)
     const [current, setCurrent] = useState(SRC)
+    const [sortAscending, setSortsortAscending] = useState(true)
     const [src, setSrc] = useState(null as Cell)
     const [dst, setDst] = useState(null as Cell)
     const [undoHistory, setUndoHistory] = useState([] as {cell: Cell, value: unknown}[])
@@ -65,7 +67,7 @@ export function App() : JSX.Element {
                 flexDirection={'row'}
                 justifyContent={'space-between'}
                 alignItems={'center'}
-                width={190}
+                width={232}
             >
                 <Button
                     onClick={() => { doCheckAndMerge(table, src, dst, undoHistory, setUndoHistory) }}
@@ -78,6 +80,14 @@ export function App() : JSX.Element {
                     icon={'sort'}
                     onClick={() => { setSrc(dst); setDst(src) }}
                     aria-label={'Invert'}
+                />
+                <Button
+                    icon={sortAscending ? 'ascending' : 'descending'}
+                    onClick={() => {
+                        doSortCell(table, dst, sortAscending, undoHistory, setUndoHistory)
+                        setSortsortAscending(!sortAscending)
+                    }}
+                    aria-label={'Sort'}
                 />
                 <Button
                     aria-label={'Undo'}
