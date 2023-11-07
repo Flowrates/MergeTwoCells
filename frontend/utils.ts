@@ -120,11 +120,11 @@ export async function doCheckAndMerge(
 
 async function doMerge(table: Table, src: Cell, dst: Cell) {
     const srcType = src.field.type
-    const srcValue = (src.record.getCellValue(src.field) || []) as unknown[]
-    const dstValue = (dst.record.getCellValue(dst.field) || []) as { id: string} []
-    const merged = [...dstValue]
+    const srcValues = (src.record.getCellValue(src.field) || []) as unknown[]
+    const dstValues = (dst.record.getCellValue(dst.field) || []) as { id: string} []
+    const merged = [...dstValues]
 
-    for (const srcItem of srcValue) {
+    for (const srcValue of srcValues) {
         let item: { id: string}
 
         if (
@@ -132,19 +132,19 @@ async function doMerge(table: Table, src: Cell, dst: Cell) {
             || srcType === MULTIPLE_RECORD_LINKS
             || srcType === MULTIPLE_ATTACHMENTS
         ) {
-            item = srcItem as { id: string}
+            item = srcValue as { id: string}
         } else if (
             srcType === MULTIPLE_LOOKUP_VALUES
-            && (srcItem as { value: { id: string} } )?.value?.id
+            && (srcValue as { value: { id: string} } )?.value?.id
         ) {
-            item = (srcItem as { value: { id: string} } ).value
+            item = (srcValue as { value: { id: string} } ).value
         } else {
             console.warn('Wrong Source type')
 
             return
         }
 
-        if (!containsId(dstValue, item)) {
+        if (!containsId(dstValues, item)) {
             merged.push(item)
         }
     }
