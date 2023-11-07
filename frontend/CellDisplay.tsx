@@ -13,10 +13,19 @@ import { CellDisplayOpts } from './types'
 export function CellDisplay({ label, active, cell }: CellDisplayOpts): JSX.Element {
     const { record, field } = cell || { record: null, field: null }
 
+    let loaded = true
+    try {
+        record.getCellValue(cell.field)
+    } catch {
+        loaded = false
+    }
+
     return (
         <FormField
             label={label}
-            description={`${record?.name} / ${field?.name}${active ? ' 👈' : ''}`}
+            description={loaded
+                ? `${record?.name} / ${field?.name}${active ? ' 👈' : ''}`
+                : '❔ No cell'}
         >
             <Box
                 border='default'
@@ -25,10 +34,9 @@ export function CellDisplay({ label, active, cell }: CellDisplayOpts): JSX.Eleme
                 overflow='hidden'
                 padding='1'
             >
-                {field && record ?
-                    <CellRenderer field={field} record={record} />
-                    :
-                    ''
+                {loaded
+                    ? <CellRenderer field={field} record={record} />
+                    : ''
                 }
             </Box>
         </FormField>
