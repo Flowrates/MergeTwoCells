@@ -10,7 +10,7 @@ import { CellDisplayOpts } from './types'
 
 
 
-export function CellDisplay({ label, active, cell }: CellDisplayOpts): JSX.Element {
+export function CellDisplay({ label, cell }: CellDisplayOpts): JSX.Element {
     const { record, field } = cell || { record: null, field: null }
 
     let loaded = true
@@ -24,7 +24,7 @@ export function CellDisplay({ label, active, cell }: CellDisplayOpts): JSX.Eleme
         <FormField
             label={label}
             description={loaded
-                ? `${record?.name} / ${field?.name}${active ? ' 👈' : ''}`
+                ? `${record?.name} / ${field?.name}`
                 : '❔ No cell'}
         >
             <Box

@@ -15,4 +15,4 @@ export type UndoHistory = {
 }
 
 
-export type CellDisplayOpts = { label: string, active: boolean, cell: Cell }
+export type CellDisplayOpts = { label: string, cell: Cell }
