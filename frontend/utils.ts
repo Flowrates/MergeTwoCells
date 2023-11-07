@@ -150,14 +150,14 @@ async function doMerge(table: Table, src: Cell, dst: Cell) {
     }
 
     await doSetCell(table, dst, merged)
+
+
+    function containsId(collection: { id: string }[], item: { id: string }) {
+        return item?.id && collection.filter(({ id }) => id === item.id).length !== 0
+    }
 }
 
 
 async function doSetCell(table: Table, cell: Cell, value: unknown) {
     await table.updateRecordAsync(cell.record, { [cell.field.id]: value })
-}
-
-
-function containsId(collection: { id: string }[], item: { id: string }) {
-    return item?.id && collection.filter(({ id }) => id === item.id).length !== 0
 }
