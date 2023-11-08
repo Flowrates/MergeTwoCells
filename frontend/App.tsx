@@ -60,8 +60,14 @@ export function App() : JSX.Element {
 
     return (
         <Box padding='3'>
-            <CellDisplay label={`🏹 Source${current === SRC ? ' ◀️' : ''}`} cell={src} />
-            <CellDisplay label={`🎯 Destination${current === DST ? ' ◀️' : ''}`} cell={dst} />
+            <CellDisplay
+                label={`🏹 Source${current === SRC ? ' ◀️' : ''}`}
+                cell={src}
+            />
+            <CellDisplay
+                label={`🎯 Destination${current === DST ? ' ◀️' : ''}`}
+                cell={dst}
+            />
             <Box
                 display={'flex'}
                 flexDirection={'row'}
