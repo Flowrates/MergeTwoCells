@@ -45,7 +45,11 @@ export async function doUndo(
     undoHistory: UndoHistory[],
     setUndoHistory: React.Dispatch<React.SetStateAction<UndoHistory[]>>,
 ): Promise<void> {
+    try {
     await doSetCell(table, undoHistory[0].cell, undoHistory[0].value)
+    } catch (error) {
+        console.error(`Could not undo this one, moving on...\n${error}`)
+    }
     setUndoHistory(undoHistory.slice(1))
 }
 
