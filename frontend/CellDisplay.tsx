@@ -7,18 +7,14 @@ import {
 } from '@airtable/blocks/ui'
 
 import { CellDisplayOpts } from './types'
+import { isLoaded } from './utils'
 
 
 
 export function CellDisplay({ label, cell }: CellDisplayOpts): JSX.Element {
     const { record, field } = cell || { record: null, field: null }
 
-    let loaded = true
-    try {
-        record.getCellValue(cell.field)
-    } catch {
-        loaded = false
-    }
+    const loaded = isLoaded(cell)
 
     return (
         <FormField

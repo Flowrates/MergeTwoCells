@@ -46,7 +46,7 @@ export async function doUndo(
     setUndoHistory: React.Dispatch<React.SetStateAction<UndoHistory[]>>,
 ): Promise<void> {
     try {
-    await doSetCell(table, undoHistory[0].cell, undoHistory[0].value)
+        await doSetCell(table, undoHistory[0].cell, undoHistory[0].value)
     } catch (error) {
         console.error(`Could not undo this one, moving on...\n${error}`)
     }
@@ -174,6 +174,12 @@ export async function doSortCell(
     undoHistory: UndoHistory[],
     setUndoHistory: React.Dispatch<React.SetStateAction<UndoHistory[]>>,
 ): Promise<void> {
+    if (!isLoaded(cell)) {
+        console.warn('Not loaded')
+
+        return
+    }
+
     const type = cell.field.type
 
     if (!(
@@ -198,4 +204,16 @@ export async function doSortCell(
     )
 
     await doSetCell(table, cell, values)
+}
+
+
+export function isLoaded(cell: Cell): boolean {
+    let loaded = true
+    try {
+        cell.record.getCellValue(cell.field)
+    } catch {
+        loaded = false
+    }
+
+    return loaded
 }
