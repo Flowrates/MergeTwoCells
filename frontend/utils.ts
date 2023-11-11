@@ -198,7 +198,7 @@ export async function doSortCell(
 
     values.sort(
         (a, b) => (
-            (sortAscending ? 1 : -1)
+            (sortAscending ? -1 : 1)
             * a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
         ),
     )
