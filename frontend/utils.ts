@@ -29,7 +29,15 @@ export function canMerge(table: Table, src: Cell, dst: Cell): boolean {
             && !!dst
             && (src.field?.type === dst.field?.type
                 || (dst.field?.type === MULTIPLE_RECORD_LINKS
-                    && src.field?.type === MULTIPLE_LOOKUP_VALUES))
+                    && src.field?.type === MULTIPLE_LOOKUP_VALUES
+                    && (src.field.options.result as { type: string }).type === 'multipleRecordLinks'
+                    && src.field.options.fieldIdInLinkedTable === dst.field.id
+                )
+                || (dst.field?.type === MULTIPLE_ATTACHMENTS
+                    && src.field?.type === MULTIPLE_LOOKUP_VALUES
+                    && (src.field.options.result as { type: string }).type === 'multipleAttachments'
+                )
+            )
             && !!table.hasPermissionToUpdateRecord(undefined, { [dst.field.id]: undefined })
         )
     } catch (error) {
@@ -61,64 +69,21 @@ export async function doCheckAndMerge(
     undoHistory: UndoHistory[],
     setUndoHistory: React.Dispatch<React.SetStateAction<UndoHistory[]>>,
 ): Promise<void> {
-    const srcType = src.field.type
-    const dstType = dst.field.type
 
-    if (!canMerge(table, src, dst)) {
+    if (!canMerge(table, src, dst)
+        || !(
+            dst.field.type === MULTIPLE_SELECTS
+            || dst.field.type === MULTIPLE_RECORD_LINKS
+            || dst.field.type === MULTIPLE_ATTACHMENTS
+        )
+    ) {
         console.log('Cannot merge')
 
         return
     }
 
     setUndoHistory([{ cell: dst, value: dst.record.getCellValue(dst.field) }, ...undoHistory])
-
-    switch (dstType) {
-        case MULTIPLE_SELECTS: {
-            if (srcType !== MULTIPLE_SELECTS) {
-                console.log('Can only merge Multiple Records into Multiple Records')
-                setUndoHistory(undoHistory.slice(-1))
-
-                break
-            }
-            await doMerge(table, src, dst)
-
-            break
-        }
-
-        case MULTIPLE_RECORD_LINKS: {
-            if (
-                srcType !== MULTIPLE_RECORD_LINKS
-                && !(srcType === MULTIPLE_LOOKUP_VALUES
-                    && (src.record.getCellValue(src.field) as { value: { id: string} }[])[0]?.value?.id)
-            ) {
-                console.log('Can only merge Linked Records or Record Lookups into Linked Records')
-                setUndoHistory(undoHistory.slice(-1))
-
-                break
-            }
-            await doMerge(table, src, dst)
-
-            break
-        }
-
-        case MULTIPLE_ATTACHMENTS: {
-            if (srcType !== MULTIPLE_ATTACHMENTS) {
-                console.log('Can only merge Attachments into Attachments')
-                setUndoHistory(undoHistory.slice(-1))
-
-                break
-            }
-            await doMerge(table, src, dst)
-
-            break
-        }
-
-        default:
-            console.log('Destination type not mergeable')
-            setUndoHistory(undoHistory.slice(-1))
-
-            return
-    }
+    await doMerge(table, src, dst)
 }
 
 
