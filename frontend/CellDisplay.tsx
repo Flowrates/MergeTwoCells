@@ -26,8 +26,8 @@ export function CellDisplay({ label, cell }: CellDisplayOpts): JSX.Element {
             <Box
                 border='default'
                 borderRadius='large'
-                height={58 + 11}
-                overflow='hidden'
+                height='auto'
+                minHeight={60}
                 padding='1'
             >
                 {loaded
