@@ -21,7 +21,8 @@ export function CellDisplay({ label, cell }: CellDisplayOpts): JSX.Element {
             label={label}
             description={loaded
                 ? `${record?.name} / ${field?.name}`
-                : '❔ No cell'}
+                : '❔ No cell'
+            }
         >
             <Box
                 border='default'
@@ -32,7 +33,8 @@ export function CellDisplay({ label, cell }: CellDisplayOpts): JSX.Element {
             >
                 {loaded
                     ? <CellRenderer field={field} record={record} />
-                    : ''}
+                    : ''
+                }
             </Box>
         </FormField>
     )
